@@ -2,7 +2,7 @@ const express = require('express');
 const db = require('./db.js')
 const app = express();
 const cors = require('cors')
-const port = 3001;
+const port = 3001 || process.env.PORT;
 
 // Middleware para permitir o parsing de JSON
 app.use(express.json());
