@@ -74,15 +74,15 @@ app.post('/product', async (req, res) => {
 
 // Atualizar produto
 app.put('/product/:id', async (req, res) => {
-    const { image, title, subtitle, description, price, lastprice, tag, url } = req.body;
+    const { title, subtitle, description, price, lastprice, tag, url } = req.body;
     const productId = req.params.id;
 
     try {
         const result = await pool.query(`
             UPDATE products 
-            SET image=$1, title=$2, subtitle=$3, description=$4, price=$5, lastprice=$6, tag=$7, url=$8 
+            SET title=$2, subtitle=$3, description=$4, price=$5, lastprice=$6, tag=$7, url=$8 
             WHERE id=$9
-        `, [image, title, subtitle, description, price, lastprice, tag, url, productId]);
+        `, [title, subtitle, description, price, lastprice, tag, url, productId]);
 
         res.json({
             message: 'Produto atualizado com sucesso!',
