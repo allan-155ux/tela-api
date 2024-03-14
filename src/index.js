@@ -4,9 +4,10 @@ const app = express();
 const cors = require('cors')
 const port = process.env.PORT || 3001;
 
-// Middleware para permitir o parsing de JSON
 app.use(express.json());
 app.use(cors());
+
+app.get("/", (req, res) => res.send("Beckend Pizza App"));
 
 // Rota para retornar um produto com base no ID
 app.get('/product/:id', (req, res) => {
@@ -51,9 +52,9 @@ app.get('/products', (req, res) => {
 
 // Adicionar produto
 app.post('/product', (req, res) => {
-    const { image, title, subtitle, description, price, lastprice, tag } = req.body;
+    const { title, subtitle, description, price, lastprice, tag, url } = req.body;
 
-    db.run(`INSERT INTO products (image, title, subtitle, description, price, lastprice, tag, url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, [image, title, subtitle, description, price, lastprice, tag, url], function(err) {
+    db.run(`INSERT INTO products (title, subtitle, description, price, lastprice, tag, url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, [title, subtitle, description, price, lastprice, tag, url], function(err) {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
