@@ -80,8 +80,8 @@ app.put('/product/:id', async (req, res) => {
     try {
         const result = await pool.query(`
             UPDATE products 
-            SET title=$2, subtitle=$3, description=$4, price=$5, lastprice=$6, tag=$7, url=$8 
-            WHERE id=$9
+            SET title=$1, subtitle=$2, description=$3, price=$4, lastprice=$5, tag=$6, url=$7 
+            WHERE id=$8
         `, [title, subtitle, description, price, lastprice, tag, url, productId]);
 
         res.json({
