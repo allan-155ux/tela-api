@@ -1,11 +1,21 @@
 const express = require('express');
-const pool = require('./db.js')
+const pool = require('../../src/db.js')
 const app = express();
 const cors = require('cors')
 const port = process.env.PORT || 3001;
 
 app.use(express.json());
-app.use(cors());
+
+const corsOptions = {
+    origin: 'https://pizzariaouropreto.vercel.app', // Substitua com a URL permitida
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+};
+
+// Configurando o CORS com opções personalizadas
+app.use(cors(corsOptions));
+
 
 app.get("/", (req, res) => res.send("Beckend Pizza App"));
 
@@ -72,7 +82,7 @@ app.get('/product/:id', async (req, res) => {
 
     try {
         const { rows } = await pool.query(`SELECT * FROM products WHERE id = $1`, [productId]);
-        
+
         if (rows.length === 0) {
             return res.status(404).json({ message: 'Produto não encontrado' });
         }
@@ -118,7 +128,7 @@ app.post('/product', async (req, res) => {
             VALUES ($1, $2, $3, $4, $5, $6, $7)
             RETURNING id
         `, [title, subtitle, description, price, lastprice, tag, url]);
-        
+
         res.json({
             message: 'Produto adicionado com sucesso!',
             productId: result.rows[0].id
