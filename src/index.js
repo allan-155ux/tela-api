@@ -9,6 +9,63 @@ app.use(cors());
 
 app.get("/", (req, res) => res.send("Beckend Pizza App"));
 
+// Rota para criar pagamento cartão
+app.post('/create-payment-card', async (req, res) => {
+    try {
+        const { customerId, value, description, cardNumber, cardExpirationMonth, cardExpirationYear, cardCvv } = req.body;
+
+        const response = await axios.post('https://www.asaas.com/api/v3/payments', {
+            customer: customerId,
+            billingType: 'CREDIT_CARD',
+            value,
+            description,
+            creditCard: {
+                number: cardNumber,
+                expMonth: cardExpirationMonth,
+                expYear: cardExpirationYear,
+                cvc: cardCvv
+            }
+        }, {
+            headers: {
+                'access_token': 'SUA_CHAVE_DE_ACESSO_DA_API_DA_ASASS'
+            }
+        });
+
+        res.json(response.data);
+    } catch (error) {
+        console.error('Erro ao criar pagamento com cartão de crédito:', error.response.data);
+        res.status(500).json({ error: 'Erro ao criar pagamento com cartão de crédito' });
+    }
+});
+
+// Rota para criar um novo cliente na Asaas
+app.post('/clients', async (req, res) => {
+    try {
+        const { name, email, cpfCnpj, postalCode, address, addressNumber, complement, province, phone } = req.body;
+
+        const response = await axios.post('https://www.asaas.com/api/v3/customers', {
+            name,
+            email,
+            cpfCnpj,
+            postalCode,
+            address,
+            addressNumber,
+            complement,
+            province,
+            phone
+        }, {
+            headers: {
+                'access_token': 'SUA_CHAVE_DE_ACESSO_DA_API_DA_ASASS'
+            }
+        });
+
+        res.json(response.data);
+    } catch (error) {
+        console.error('Erro ao criar cliente:', error.response.data);
+        res.status(500).json({ error: 'Erro ao criar cliente' });
+    }
+});
+
 // Rota para retornar informações de um produto com base no ID
 app.get('/product/:id', async (req, res) => {
     const productId = req.params.id;
