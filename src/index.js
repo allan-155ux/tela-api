@@ -118,6 +118,38 @@ app.get('/products', async (req, res) => {
     }
 });
 
+// Rota para criar varios produtos
+app.post('/products', async (req, res) => {
+    const products = req.body; // Array de produtos
+
+    try {
+        const insertedProductIds = [];
+
+        // Iterar sobre cada produto no array
+        for (const product of products) {
+            const { title, subtitle, description, price, lastprice, tag, url } = product;
+
+            // Inserir o produto no banco de dados
+            const result = await pool.query(`
+                INSERT INTO products (title, subtitle, description, price, lastprice, tag, url)
+                VALUES ($1, $2, $3, $4, $5, $6, $7)
+                RETURNING id
+            `, [title, subtitle, description, price, lastprice, tag, url]);
+
+            // Armazenar o ID do produto inserido
+            insertedProductIds.push(result.rows[0].id);
+        }
+
+        res.json({
+            message: 'Produtos adicionados com sucesso!',
+            productIds: insertedProductIds
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+});
+
 // Adicionar produto
 app.post('/product', async (req, res) => {
     const { title, subtitle, description, price, lastprice, tag, url } = req.body;
