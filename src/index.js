@@ -4,17 +4,11 @@ const app = express();
 const cors = require('cors')
 const port = process.env.PORT || 3001;
 const { SpeedInsights } = require("@vercel/speed-insights/next")
+
 app.use(express.json());
 
-const corsOptions = {
-    origin: 'https://pizzariaouropreto.vercel.app', // Substitua com a URL permitida
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
-};
-
 // Configurando o CORS com opções personalizadas
-app.use(cors(corsOptions));
+app.use(cors());
 
 
 app.get("/", (req, res) => res.send("Beckend Pizza App"));
