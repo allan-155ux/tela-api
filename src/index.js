@@ -3,7 +3,7 @@ const pool = require('../../src/db.js')
 const app = express();
 const cors = require('cors')
 const port = process.env.PORT || 3001;
-
+const { SpeedInsights } = require("@vercel/speed-insights/next")
 app.use(express.json());
 
 const corsOptions = {
